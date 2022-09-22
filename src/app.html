@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+	<meta name="viewport" content="width=device-width" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+
+	<style>
+		* {
+			font-family: 'Montserrat', sans-serif;
+		}
+
+		html,
+		body {
+			margin: 0;
+			padding: 0;
+			background: black;
+			color: rgb(195, 195, 195);
+		}
+
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			font-weight: normal;
+		}
+
+		input {
+			border: none;
+			outline: none;
+			background-color: rgb(195, 195, 195);
+		}
+
+		@keyframes fadeIn {
+			0% {
+				opacity: 0;
+			}
+
+			100% {
+				opacity: 1;
+			}
+		}
+	</style>
+
+	<script>
+		window.handleDocumentLoad = () => {
+			const specialCharacters = '-+.:,!?*';
+			const specialCharactersSet = new Set(specialCharacters.split(''));
+
+			function getRandom(max) {
+				return Math.floor(Math.random() * max);
+			}
+
+			function randomCharacter(characters) {
+				return characters.charAt(getRandom(characters.length));
+			}
+
+			function generatePassword(characterCount, useSpecialCharacters) {
+				let characters =
+					'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890' +
+					(useSpecialCharacters ? specialCharacters : '');
+
+				let result = [];
+
+				for (let i = 0; i < characterCount; i++) {
+					result.push(randomCharacter(characters));
+				}
+
+				if (useSpecialCharacters ? !result.some((char) => specialCharactersSet.has(char)) : false) {
+					result[getRandom(characterCount)] = randomCharacter(specialCharacters);
+				}
+
+				return result.join('');
+			}
+
+			let initialCharacterCount = parseInt(
+				localStorage.getItem('passwordGenerator.characterCount') ?? ''
+			);
+
+			window.initialCharacterCount = Number.isFinite(initialCharacterCount) ? initialCharacterCount : 8;
+
+			let initialUseSpecialCharacters =
+				localStorage.getItem('passwordGenerator.useSpecialCharacters') == 'true'
+					? true
+					: localStorage.getItem('passwordGenerator.useSpecialCharacters') == 'false'
+						? false
+						: null;
+
+			window.initialUseSpecialCharacters = initialUseSpecialCharacters == null ? true : initialUseSpecialCharacters;
+
+			window.initialPassword = generatePassword(window.initialCharacterCount, window.initialUseSpecialCharacters);
+
+			navigator.clipboard.writeText(window.initialPassword);
+		}
+	</script>
+
+	%sveltekit.head%
+</head>
+
+<body onload="handleDocumentLoad()">
+	%sveltekit.body%
+</body>
+
+</html>
