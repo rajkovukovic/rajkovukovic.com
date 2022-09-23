@@ -27,9 +27,12 @@
 			});
 	}
 
-	function regeneratePasswordAndCopyToClipboard() {
-		console.log('regeneratePasswordAndCopyToClipboard');
+	function regeneratePassword() {
 		password = generatePassword(characterCount, useSpecialCharacters);
+	}
+
+	function regeneratePasswordAndCopyToClipboard() {
+		regeneratePassword();
 		copyPasswordToClipboard();
 	}
 
@@ -52,10 +55,10 @@
 
 <form on:submit|preventDefault={regeneratePasswordAndCopyToClipboard}>
 	{#key password + copiedToClipboardTimer}
-		<h2>
+		<h2 on:click={copyPasswordToClipboard}>
 			{copiedToClipboardTimer
 				? copyToClipboardError
-					? 'Please copy password manually'
+					? 'Tap password to copy'
 					: 'Copied'
 				: 'Password Generator'}
 		</h2>
@@ -77,6 +80,7 @@
 					id="characterCount"
 					value={characterCount}
 					on:input={handleCharacterCountChange}
+					on:change={copyPasswordToClipboard}
 					min="4"
 					max={maxCharacterCount}
 				/>
@@ -133,5 +137,9 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: stretch;
+	}
+
+	input {
+		-webkit-tap-highlight-color: transparent;
 	}
 </style>
