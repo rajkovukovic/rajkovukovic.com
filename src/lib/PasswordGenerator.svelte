@@ -17,8 +17,8 @@
 	);
 
 	function copyPasswordToClipboard() {
-		navigator.clipboard
-			.writeText(password)
+		Promise.resolve()
+			.then(() => navigator.clipboard.writeText(password))
 			.then(() => (copyToClipboardError = false))
 			.catch(() => (copyToClipboardError = true))
 			.finally(() => {
