@@ -1,53 +1,30 @@
 <script lang="ts">
-	let global: any = typeof window !== 'undefined' ? window : {};
+	import { globalWindow } from '$lib/globalWindow';
+	import { generatePassword } from '$lib/generatePassword';
+	import { safeStorage } from '$lib/safeStorage';
+	import { makeFinite } from '$lib/utils';
 
-	const maxCharacterCount = 24;
-	let characterCount = global.initialCharacterCount ?? 8;
-	let useSpecialCharacters = global.initialUseSpecialCharacters ?? true;
-	let password = global.initialPassword ?? '';
+	const maxCharacterCount = 20;
+	let characterCount = makeFinite(safeStorage.passwordGeneratorCharacterCount, 8);
+	let useSpecialCharacters = safeStorage.passwordGeneratorUseSpecialCharacters ?? true;
+	let password = globalWindow.initialPassword ?? '';
 	let copiedToClipboardTimer: any;
+	let copyToClipboardError = false;
 
 	copiedToClipboardTimer = setTimeout(
 		() => (copiedToClipboardTimer = setTimeout(() => (copiedToClipboardTimer = null), 1500)),
 		1000
 	);
 
-	const specialCharacters = '-+.:,!?*';
-	const specialCharactersSet = new Set(specialCharacters.split(''));
-
-	function getRandom(max: number) {
-		return Math.floor(Math.random() * max);
-	}
-
-	function randomCharacter(characters: string): string {
-		return characters.charAt(getRandom(characters.length));
-	}
-
-	function generatePassword(characterCount: number, useSpecialCharacters: boolean): string {
-		let characters =
-			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890' +
-			(useSpecialCharacters ? specialCharacters : '');
-
-		let result: string[] = [];
-
-		for (let i = 0; i < characterCount; i++) {
-			result.push(randomCharacter(characters));
-		}
-
-		if (useSpecialCharacters ? !result.some((char) => specialCharactersSet.has(char)) : false) {
-			result[getRandom(characterCount)] = randomCharacter(specialCharacters);
-		}
-
-		return result.join('');
-	}
-
 	function copyPasswordToClipboard() {
 		navigator.clipboard
 			.writeText(password)
-			.then(() => console.log('copyPasswordToClipboard: success'))
-			.catch(() => console.log('copyPasswordToClipboard: fail'));
-		clearTimeout(copiedToClipboardTimer);
-		copiedToClipboardTimer = setTimeout(() => (copiedToClipboardTimer = null), 1500);
+			.then(() => (copyToClipboardError = false))
+			.catch(() => (copyToClipboardError = true))
+			.finally(() => {
+				clearTimeout(copiedToClipboardTimer);
+				copiedToClipboardTimer = setTimeout(() => (copiedToClipboardTimer = null), 1500);
+			});
 	}
 
 	function regeneratePasswordAndCopyToClipboard() {
@@ -55,6 +32,8 @@
 		password = generatePassword(characterCount, useSpecialCharacters);
 		copyPasswordToClipboard();
 	}
+
+	globalWindow.regeneratePasswordAndCopyToClipboard = regeneratePasswordAndCopyToClipboard;
 
 	function handleUseSpecialCharactersChange(event: any) {
 		let value = event.target.checked;
@@ -71,34 +50,33 @@
 	}
 </script>
 
-<section>
+<form on:submit|preventDefault={regeneratePasswordAndCopyToClipboard}>
 	{#key password + copiedToClipboardTimer}
 		<h2>
-			{copiedToClipboardTimer ? 'Copied' : 'Password Generator'}
+			{copiedToClipboardTimer
+				? copyToClipboardError
+					? 'Please copy password manually'
+					: 'Copied'
+				: 'Password Generator'}
 		</h2>
 	{/key}
 	<table>
 		<tr on:click={copyPasswordToClipboard}>
-			<td><label for="password" on:click|preventDefault>Password</label></td>
+			<td><label for="password">Password</label></td>
 			<td>
-				<input
-					readonly
-					id="password"
-					value={password}
-					style:min-width="{maxCharacterCount * 1.2}ch"
-				/>
+				<span id="password" style:min-width="{maxCharacterCount}ch">{password}</span>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<label for="characterCount">Length = {characterCount}</label>
+				<label for="characterCount">{characterCount} characters</label>
 			</td>
 			<td>
 				<input
 					type="range"
 					id="characterCount"
 					value={characterCount}
-					on:change={handleCharacterCountChange}
+					on:input={handleCharacterCountChange}
 					min="4"
 					max={maxCharacterCount}
 				/>
@@ -121,18 +99,25 @@
 		<tr>
 			<td colspan="2">
 				<div>
-					<button on:click={regeneratePasswordAndCopyToClipboard}>Generate New And Copy</button>
+					<button>Generate New And Copy</button>
 				</div>
 			</td>
 		</tr>
 	</table>
-</section>
+</form>
 
 <style>
-	section {
+	form {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		padding: 1em;
+	}
+
+	#password {
+		display: inline-block;
+		font-weight: bold;
+		/* font-family: monospace; */
 	}
 
 	h2 {
