@@ -4,6 +4,7 @@
 	import { safeStorage } from '$lib/safeStorage';
 	import { makeFinite } from '$lib/utils';
 
+	const minCharacterCount = 4;
 	const maxCharacterCount = 20;
 	let characterCount = makeFinite(safeStorage.passwordGeneratorCharacterCount, 8);
 	let useSpecialCharacters = safeStorage.passwordGeneratorUseSpecialCharacters ?? true;
@@ -39,16 +40,22 @@
 	globalWindow.regeneratePasswordAndCopyToClipboard = regeneratePasswordAndCopyToClipboard;
 
 	function handleUseSpecialCharactersChange(event: any) {
-		let value = event.target.checked;
+		let value = event.target.checked ?? (!useSpecialCharacters);
 		useSpecialCharacters = value;
-		localStorage.setItem('passwordGenerator.useSpecialCharacters', value);
+		safeStorage.setItem('passwordGenerator.useSpecialCharacters', value);
+		regeneratePasswordAndCopyToClipboard();
+	}
+
+	function increaseCharacterCount() {
+		characterCount = characterCount < maxCharacterCount ? characterCount + 1 : minCharacterCount;
+		safeStorage.setItem('passwordGenerator.characterCount', characterCount);
 		regeneratePasswordAndCopyToClipboard();
 	}
 
 	function handleCharacterCountChange(event: any) {
 		let value = event.currentTarget.value;
 		characterCount = parseInt(value);
-		localStorage.setItem('passwordGenerator.characterCount', value);
+		safeStorage.setItem('passwordGenerator.characterCount', value);
 		regeneratePasswordAndCopyToClipboard();
 	}
 </script>
@@ -71,8 +78,8 @@
 			</td>
 		</tr>
 		<tr>
-			<td>
-				<label for="characterCount">{characterCount} characters</label>
+			<td on:click={increaseCharacterCount}>
+				<label for="not-characterCount">{characterCount} characters</label>
 			</td>
 			<td>
 				<input
@@ -81,14 +88,14 @@
 					value={characterCount}
 					on:input={handleCharacterCountChange}
 					on:change={copyPasswordToClipboard}
-					min="4"
+					min={minCharacterCount}
 					max={maxCharacterCount}
 				/>
 			</td>
 		</tr>
 		<tr>
-			<td>
-				<label for="useSpecialCharacters">Special characters</label>
+			<td on:click={handleUseSpecialCharactersChange}>
+				<label for="not-useSpecialCharacters">Special characters</label>
 			</td>
 			<td>
 				<input
@@ -141,5 +148,9 @@
 
 	input {
 		-webkit-tap-highlight-color: transparent;
+	}
+
+	h2, label {
+		user-select: none;
 	}
 </style>
