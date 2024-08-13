@@ -33,8 +33,6 @@
 		z-index: 10;
 		display: flex;
 		flex-direction: row;
-		position: absolute;
-		position: relative;
 		width: fit-content;
 		height: auto;
 		bottom: 0;
@@ -44,6 +42,8 @@
 		// frosted glass effect
 		background-color: var(--color-bg-navbar);
 		backdrop-filter: blur(5px);
+		box-shadow: 0 0 15px 10px var(--color-bg-navbar);
+		// filter: drop-shadow(0 0 1rem 0.75rem var(--color-bg-navbar));
 	}
 
 	// selector when screen is larger than 768px;
