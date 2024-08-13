@@ -8,35 +8,37 @@
 		// Append -bullseye or -buster to pin to an OS version.
 		// Use -bullseye variants on local on arm64/Apple Silicon.
 		"args": {
-			"VARIANT": "16-bullseye"
+			"VARIANT": "18-bullseye"
 		}
 	},
-
-	// Set *default* container specific settings.json values on container create.
-	"settings": {},
-
 	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [
-		"vscjava.vscode-java-pack",
-		"svelte.svelte-vscode",
-		"ardenivanov.svelte-intellisense",
-		"fivethree.vscode-svelte-snippets",
-		"steoates.autoimport",
-		"coenraads.bracket-pair-colorizer-2",
-		"streetsidesoftware.code-spell-checker",
-		"dbaeumer.vscode-eslint",
-		"waderyan.gitblame",
-		"christian-kohler.path-intellisense",
-		"esbenp.prettier-vscode",
-		"rvest.vs-code-prettier-eslint"
-	],
-
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"vscjava.vscode-java-pack",
+				"svelte.svelte-vscode",
+				"ardenivanov.svelte-intellisense",
+				"fivethree.vscode-svelte-snippets",
+				"steoates.autoimport",
+				"coenraads.bracket-pair-colorizer-2",
+				"streetsidesoftware.code-spell-checker",
+				"dbaeumer.vscode-eslint",
+				"waderyan.gitblame",
+				"christian-kohler.path-intellisense",
+				"esbenp.prettier-vscode",
+				"rvest.vs-code-prettier-eslint",
+				"mhutchie.git-graph",
+				"donjayamanne.githistory",
+				"felipecaputo.git-project-manager",
+				"huizhou.githd",
+				"codezombiech.gitignore"
+			]
+		}
+	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
-
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "yarn install",
-
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "node"
 }
