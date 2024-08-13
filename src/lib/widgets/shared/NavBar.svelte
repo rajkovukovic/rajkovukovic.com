@@ -16,15 +16,14 @@
 
 <style lang="scss">
 	.navbar-container {
-		position: fixed;
-		top: auto;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		cursor: pointer;
+		// position: fixed;
+		// top: auto;
+		// left: 0;
+		// right: 0;
+		// bottom: 0;
+		// display: flex;
+		// justify-content: center;
+		// align-items: center;
 		// background-color: rgba(0, 255, 255, 0.18);
 	}
 
@@ -36,7 +35,6 @@
 		width: fit-content;
 		height: auto;
 		bottom: 0;
-		margin: var(--spacing-md);
 		border-radius: var(--border-radius-md);
 		border: 0.5px solid var(--color-navbar);
 		// frosted glass effect

@@ -25,6 +25,7 @@
 	class:error
 	bind:clientWidth={w}
 	bind:clientHeight={h}
+	on:click
 >
 	<div class="content">
 		<slot />

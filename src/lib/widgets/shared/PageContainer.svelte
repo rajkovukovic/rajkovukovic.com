@@ -1,8 +1,16 @@
 <script lang="ts">
 	import SafeArea from './SafeArea.svelte';
 
+	export const title: string | null = null;
+
 	export let withSafeArea = true;
 </script>
+
+<svelte:head>
+	{#if typeof title === 'string'}
+		<title>{title}</title>
+	{/if}
+</svelte:head>
 
 <section>
 	<SafeArea enabled={withSafeArea}>
