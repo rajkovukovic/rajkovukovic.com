@@ -31,7 +31,7 @@
 	{/each}
 
 	{#if show404}
-		<NavBarButton active href={route404.path}>
+		<NavBarButton error href={route404.path}>
 			<Icon src={route404.icon} />
 		</NavBarButton>
 	{/if}

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ownerName } from '$lib/ownerName';
 	import PasswordGenerator from '$lib/PasswordGenerator.svelte';
+	import PageContainer from '$lib/widgets/shared/PageContainer.svelte';
 </script>
 
 <svelte:head>
@@ -8,18 +9,18 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<section>
-	<PasswordGenerator />
-</section>
+<PageContainer>
+	<div>
+		<PasswordGenerator />
+	</div>
+</PageContainer>
 
 <style>
-	section {
+	div {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		flex: 1;
-		opacity: 0;
-		animation: fadeIn 0.3s ease-out 1s forwards;
 	}
 </style>

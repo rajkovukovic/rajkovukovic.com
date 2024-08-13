@@ -137,7 +137,6 @@
 
 	h2 {
 		text-align: center;
-		animation: fadeIn 0.3s ease-out;
 	}
 
 	table {
