@@ -1,0 +1,41 @@
+{
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "explicit",
+		"source.organizeImports": "explicit"
+	},
+	"editor.formatOnSave": true,
+	"explorer.fileNesting.enabled": true,
+	"editor.renderWhitespace": "boundary",
+	"editor.minimap.enabled": false,
+	"explorer.fileNesting.expand": false,
+	"explorer.fileNesting.patterns": {
+		"*.ts": "${capture}.helpers.ts",
+		"package.json": ".gitignore, .npmrc, .prettierignore, .prettierrc, eslint.config.js, playwright.config.ts, svelte.config.js, tsconfig.json, vite.config.ts, yarn.lock, .firebaserc, firebase.json",
+		"README.md": "LICENSE, CHANGELOG.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md, RELEASENOTES.md",
+		"env": "env.example, env.production, env.production.backup, env.demo, env.test, env.development"
+	},
+	"editor.formatOnSaveMode": "modificationsIfAvailable",
+	"files.insertFinalNewline": true,
+	"files.exclude": {
+		"**/.git": false,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		"**/*.g.dart": false,
+		"**/*.freezed.dart": false
+	},
+	"files.watcherExclude": {
+		"**/.dart_tool": true,
+		"**/*.g.dart": true,
+		"**/*.freezed.dart": true,
+		"node_modules": true,
+	},
+	"problems.defaultViewMode": "tree",
+	"problems.sortOrder": "severity",
+	"markdownlint.config": {
+		"MD024": false
+	},
+	"explorer.sortOrder": "mixed",
+}

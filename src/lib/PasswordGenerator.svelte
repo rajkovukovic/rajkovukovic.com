@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { globalWindow } from '$lib/globalWindow';
 	import { generatePassword } from '$lib/generatePassword';
+	import { globalWindow } from '$lib/globalWindow';
 	import { safeStorage } from '$lib/safeStorage';
 	import { makeFinite } from '$lib/utils';
 
@@ -40,7 +40,7 @@
 	globalWindow.regeneratePasswordAndCopyToClipboard = regeneratePasswordAndCopyToClipboard;
 
 	function handleUseSpecialCharactersChange(event: any) {
-		let value = event.target.checked ?? (!useSpecialCharacters);
+		let value = event.target.checked ?? !useSpecialCharacters;
 		useSpecialCharacters = value;
 		safeStorage.setItem('passwordGenerator.useSpecialCharacters', value);
 		regeneratePasswordAndCopyToClipboard();
@@ -62,6 +62,8 @@
 
 <form on:submit|preventDefault={regeneratePasswordAndCopyToClipboard}>
 	{#key password + copiedToClipboardTimer}
+		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<h2 on:click={copyPasswordToClipboard}>
 			{copiedToClipboardTimer
 				? copyToClipboardError
@@ -71,49 +73,51 @@
 		</h2>
 	{/key}
 	<table>
-		<tr on:click={copyPasswordToClipboard}>
-			<td><label for="password">Password</label></td>
-			<td>
-				<span id="password" style:min-width="{maxCharacterCount}ch">{password}</span>
-			</td>
-		</tr>
-		<tr>
-			<td on:click={increaseCharacterCount}>
-				<label for="not-characterCount">{characterCount} characters</label>
-			</td>
-			<td>
-				<input
-					type="range"
-					id="characterCount"
-					value={characterCount}
-					on:input={handleCharacterCountChange}
-					on:change={copyPasswordToClipboard}
-					min={minCharacterCount}
-					max={maxCharacterCount}
-				/>
-			</td>
-		</tr>
-		<tr>
-			<td on:click={handleUseSpecialCharactersChange}>
-				<label for="not-useSpecialCharacters">Special characters</label>
-			</td>
-			<td>
-				<input
-					id="useSpecialCharacters"
-					type="checkbox"
-					checked={useSpecialCharacters}
-					on:change={handleUseSpecialCharactersChange}
-				/>
-			</td>
-		</tr>
+		<tbody>
+			<tr on:click={copyPasswordToClipboard}>
+				<td><label for="password">Password</label></td>
+				<td>
+					<span id="password" style:min-width="{maxCharacterCount}ch">{password}</span>
+				</td>
+			</tr>
+			<tr>
+				<td on:click={increaseCharacterCount}>
+					<label for="not-characterCount">{characterCount} characters</label>
+				</td>
+				<td>
+					<input
+						type="range"
+						id="characterCount"
+						value={characterCount}
+						on:input={handleCharacterCountChange}
+						on:change={copyPasswordToClipboard}
+						min={minCharacterCount}
+						max={maxCharacterCount}
+					/>
+				</td>
+			</tr>
+			<tr>
+				<td on:click={handleUseSpecialCharactersChange}>
+					<label for="not-useSpecialCharacters">Special characters</label>
+				</td>
+				<td>
+					<input
+						id="useSpecialCharacters"
+						type="checkbox"
+						checked={useSpecialCharacters}
+						on:change={handleUseSpecialCharactersChange}
+					/>
+				</td>
+			</tr>
 
-		<tr>
-			<td colspan="2">
-				<div>
-					<button>Generate New And Copy</button>
-				</div>
-			</td>
-		</tr>
+			<tr>
+				<td colspan="2">
+					<div>
+						<button>Generate New And Copy</button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
 	</table>
 </form>
 
@@ -150,7 +154,8 @@
 		-webkit-tap-highlight-color: transparent;
 	}
 
-	h2, label {
+	h2,
+	label {
 		user-select: none;
 	}
 </style>
