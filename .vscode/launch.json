@@ -5,7 +5,7 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Vite",
+			"name": "Launch",
 			"runtimeExecutable": "npm",
 			"runtimeArgs": [
 				"run",

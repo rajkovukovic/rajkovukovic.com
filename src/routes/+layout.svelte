@@ -1,9 +1,7 @@
 <script lang="ts">
-	import Header from '$lib/Header.svelte';
-	import { ownerName } from '$lib/ownerName';
 </script>
 
-<Header name={ownerName} />
+<!-- <Header name={ownerName} /> -->
 <main>
 	<slot />
 </main>

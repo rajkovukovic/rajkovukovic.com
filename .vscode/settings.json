@@ -14,7 +14,7 @@
 		"README.md": "LICENSE, CHANGELOG.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md, RELEASENOTES.md",
 		"env": "env.example, env.production, env.production.backup, env.demo, env.test, env.development"
 	},
-	"editor.formatOnSaveMode": "modificationsIfAvailable",
+	"editor.formatOnSaveMode": "file",
 	"files.insertFinalNewline": true,
 	"files.exclude": {
 		"**/.git": false,
