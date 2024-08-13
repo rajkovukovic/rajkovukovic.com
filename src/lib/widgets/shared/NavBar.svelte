@@ -6,9 +6,6 @@
 
 	$: browser && document.documentElement.style.setProperty('--navbar-width', `${w}px`);
 	$: browser && document.documentElement.style.setProperty('--navbar-height', `${h}px`);
-
-	$: browser && console.log('--navbar-width', `${w ?? 0}px`);
-	$: browser && console.log('--navbar-height', `${h ?? 0}px`);
 </script>
 
 <div class="navbar-container" bind:clientWidth={w} bind:clientHeight={h}>
@@ -32,6 +29,8 @@
 	}
 
 	.navbar-wrapper {
+		position: relative;
+		z-index: 10;
 		display: flex;
 		flex-direction: row;
 		position: absolute;
@@ -39,8 +38,12 @@
 		width: fit-content;
 		height: auto;
 		bottom: 0;
-		padding: var(--spacing-sm);
-		// background-color: rgba(165, 42, 42, 0.631);
+		margin: var(--spacing-md);
+		border-radius: var(--border-radius-md);
+		border: 0.5px solid var(--color-navbar);
+		// frosted glass effect
+		background-color: var(--color-bg-navbar);
+		backdrop-filter: blur(5px);
 	}
 
 	// selector when screen is larger than 768px;

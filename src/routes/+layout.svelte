@@ -1,12 +1,14 @@
 <script lang="ts">
+	import MainNavbar from '$lib/widgets/MainNavbar.svelte';
 </script>
 
 <!-- <Header name={ownerName} /> -->
 <main>
 	<slot />
+	<MainNavbar />
 </main>
 
-<style>
+<style lang="scss">
 	:global(body) {
 		min-height: 100vh;
 		display: flex;
