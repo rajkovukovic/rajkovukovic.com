@@ -2,11 +2,21 @@
 	import { page } from '$app/stores';
 	import { ownerName } from '$lib/ownerName';
 	import { route404, routes, settingsRoutes } from '$lib/routes';
-	import { errorStore, nextLanguage, nextTheme, showSettingsStore } from '$lib/state/app';
+	import {
+		errorStore,
+		mouseInNavigationBarStore,
+		mouseInSettingsPanelStore,
+		nextLanguage,
+		nextTheme,
+		showSettingsStore
+	} from '$lib/state/app';
 	import NavBar from '$lib/widgets/shared/NavBar.svelte';
 	import NavBarButton from '$lib/widgets/shared/NavBarButton.svelte';
 	import { Icon } from 'svelte-icons-pack';
 	import OverlayInfoPanel from './OverlayInfoPanel.svelte';
+
+	let isMouseIn: boolean;
+	let closeSettingsTimer: number | undefined;
 
 	$: rootPath = $page.url.pathname.split('/').slice(0, 2).join('/');
 	$: activeIndex = routes.findIndex((route) => route.path === rootPath);
@@ -15,6 +25,14 @@
 	// $: if (hasError && $showSettingsStore) {
 	// 	showSettingsStore.set(false);
 	// }
+
+	$: if (!$mouseInNavigationBarStore && !$mouseInSettingsPanelStore && $showSettingsStore) {
+		clearTimeout(closeSettingsTimer);
+		closeSettingsTimer = setTimeout(() => showSettingsStore.next(false), 2000);
+	} else {
+		clearTimeout(closeSettingsTimer);
+		closeSettingsTimer = undefined;
+	}
 
 	function handleAction(event: Event, action: string | undefined) {
 		if (!action) {
@@ -46,8 +64,12 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<!-- style="transform: scale(0.5) translate(-50%, - 50%);" -->
-<div class="nav-bar-container">
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div
+	class="nav-bar-container"
+	on:mouseenter={() => mouseInNavigationBarStore.next(true)}
+	on:mouseleave={() => mouseInNavigationBarStore.next(false)}
+>
 	<NavBar>
 		{#each routes as route, index}
 			<NavBarButton

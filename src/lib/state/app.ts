@@ -5,6 +5,10 @@ import type { Page } from "@sveltejs/kit";
 import { BehaviorSubject, merge, Observable, of } from 'rxjs';
 import { delay, distinctUntilChanged, map, skip, startWith, switchMap } from 'rxjs/operators';
 
+export const mouseInNavigationBarStore = new BehaviorSubject(false);
+
+export const mouseInSettingsPanelStore = new BehaviorSubject(false);
+
 export const errorStore = new BehaviorSubject<Page<Record<string, string>, string | null> | null>(null);
 
 export const showSettingsStore = new BehaviorSubject(false);

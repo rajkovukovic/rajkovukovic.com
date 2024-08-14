@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { infoPanelStore, type InfoPanelData } from '$lib/state/app';
+	import { infoPanelStore, mouseInSettingsPanelStore, type InfoPanelData } from '$lib/state/app';
 	import LanguageSelector from './LanguageSelector.svelte';
 	import ThemeSelector from './ThemeSelector.svelte';
 
 	let timer: number | undefined;
-	let isMouseIn = false;
+	let isMouseIn: boolean;
 	let action: InfoPanelData | null = null;
 	let lastAction: InfoPanelData | null = null;
 
+	$: isMouseIn = $mouseInSettingsPanelStore;
 	$: action = $infoPanelStore;
 	$: lastAction = action ?? lastAction;
 
@@ -29,8 +30,8 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	class:visible={Boolean(action) || isMouseIn}
-	on:mouseenter={() => (isMouseIn = true)}
-	on:mouseleave={() => (isMouseIn = false)}
+	on:mouseenter={() => mouseInSettingsPanelStore.next(true)}
+	on:mouseleave={() => mouseInSettingsPanelStore.next(false)}
 >
 	{#if lastAction?.language}
 		<LanguageSelector />
