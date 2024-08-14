@@ -21,10 +21,10 @@
 
 		* {
 			box-sizing: border-box;
-			/* transition:
-				color 0.2s ease-out,
-				background-color 0.2s ease-out,
-				border-color 0.2s ease-out; */
+			transition:
+				color 0.3s ease-out,
+				background-color 0.3s ease-out,
+				border-color 0.3s ease-out;
 		}
 
 		/* Base styles and shared variables */
@@ -215,6 +215,8 @@
 		body {
 			margin: 0;
 			padding: 0;
+			min-height: 100%;
+			height: 100%;
 			background-color: var(--color-bg-primary);
 			color: var(--color-text-primary);
 			font-family: var(--font-family-sans);
@@ -246,6 +248,12 @@
 			border-radius: var(--border-radius-full);
 			padding: 1em;
 			font-weight: bold;
+			border: 1px solid var(--color-primary);
+			background-color: var(--color-bg-primary);
+			color: var(--color-primary);
+		}
+
+		button.default {
 			background-color: var(--color-primary);
 			color: var(--color-bg-primary);
 		}
@@ -271,11 +279,7 @@
 		}
 
 		window.handleDocumentLoad = () => {
-			const callback = typeof window.regeneratePasswordAndCopyToClipboard === 'function'
-				? window.regeneratePasswordAndCopyToClipboard
-				: handleDocumentLoad;
-
-			wait(500).then(callback);
+			console.log('loaded');
 		}
 	</script>
 
@@ -283,7 +287,7 @@
 </head>
 
 <body onload="handleDocumentLoad()" data-sveltekit-preload-data="hover">
-	<div style="display: contents">
+	<div style="display: contents; min-height: 100%; height: 100%;">
 		%sveltekit.body%
 	</div>
 </body>

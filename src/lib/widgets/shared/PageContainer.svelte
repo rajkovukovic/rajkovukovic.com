@@ -1,8 +1,8 @@
 <script lang="ts">
 	import SafeArea from './SafeArea.svelte';
 
+	export let center: boolean = false;
 	export let title: string | null = null;
-
 	export let withSafeArea = true;
 </script>
 
@@ -12,7 +12,7 @@
 	{/if}
 </svelte:head>
 
-<section>
+<section class:center>
 	<SafeArea enabled={withSafeArea}>
 		<slot />
 	</SafeArea>
@@ -23,6 +23,12 @@
 		padding: 6rem 3rem;
 		opacity: 0;
 		animation: fadeIn 0.5s ease-out 0.1s forwards;
+		min-height: 100%;
+		&.center {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 	}
 
 	@media only screen and (min-width: 769px) {

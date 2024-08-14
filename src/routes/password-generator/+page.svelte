@@ -9,7 +9,7 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<PageContainer>
+<PageContainer center>
 	<div>
 		<PasswordGenerator />
 	</div>

@@ -8,14 +8,15 @@
 	const maxCharacterCount = 20;
 	let characterCount = makeFinite(safeStorage.passwordGeneratorCharacterCount, 8);
 	let useSpecialCharacters = safeStorage.passwordGeneratorUseSpecialCharacters ?? true;
-	let password = globalWindow.initialPassword ?? '';
+	let password =
+		globalWindow.initialPassword ?? generatePassword(characterCount, useSpecialCharacters);
 	let copiedToClipboardTimer: any;
 	let copyToClipboardError = false;
 
-	copiedToClipboardTimer = setTimeout(
-		() => (copiedToClipboardTimer = setTimeout(() => (copiedToClipboardTimer = null), 1500)),
-		1000
-	);
+	// copiedToClipboardTimer = setTimeout(
+	// 	() => (copiedToClipboardTimer = setTimeout(() => (copiedToClipboardTimer = null), 1500)),
+	// 	1000
+	// );
 
 	function copyPasswordToClipboard() {
 		Promise.resolve()
@@ -60,10 +61,10 @@
 	}
 </script>
 
-<form on:submit|preventDefault={regeneratePasswordAndCopyToClipboard}>
+<form on:submit|preventDefault={copyPasswordToClipboard}>
 	{#key password + copiedToClipboardTimer}
-		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-		<!-- svelte-ignore a11y_click_events_have_key_events -->
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 		<h2 on:click={copyPasswordToClipboard}>
 			{copiedToClipboardTimer
 				? copyToClipboardError
@@ -112,8 +113,13 @@
 
 			<tr>
 				<td colspan="2">
-					<div>
-						<button>Generate New And Copy</button>
+					<div class="button-wrapper">
+						<button on:click|preventDefault={regeneratePasswordAndCopyToClipboard}
+							>Generate New And Copy</button
+						>
+						<button on:click|preventDefault={copyPasswordToClipboard} class="default"
+							>Copy Password</button
+						>
 					</div>
 				</td>
 			</tr>
@@ -121,7 +127,7 @@
 	</table>
 </form>
 
-<style>
+<style lang="scss">
 	form {
 		display: flex;
 		flex-direction: column;
@@ -156,5 +162,19 @@
 	h2,
 	label {
 		user-select: none;
+	}
+
+	button {
+		flex: 1 1 auto;
+		&:first-of-type {
+			margin-right: 1rem;
+		}
+	}
+
+	.button-wrapper {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		margin-top: 1rem;
 	}
 </style>

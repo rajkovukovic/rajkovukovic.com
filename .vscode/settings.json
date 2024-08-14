@@ -31,6 +31,7 @@
 		"**/*.g.dart": true,
 		"**/*.freezed.dart": true,
 		"node_modules": true,
+		"**/target": true
 	},
 	"problems.defaultViewMode": "tree",
 	"problems.sortOrder": "severity",
