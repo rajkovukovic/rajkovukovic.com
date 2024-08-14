@@ -33,9 +33,9 @@
 
 		:root.loaded * {
 			transition:
-				color 0.3s ease-out,
-				background-color 0.3s ease-out,
-				border-color 0.3s ease-out;
+				color 0.1s ease-out,
+				background-color 0.1s ease-out,
+				border-color 0.1s ease-out;
 		}
 
 		/* Base styles and shared variables */
@@ -136,9 +136,9 @@
 			--color-text-muted-dark: #ced4da;
 
 			/* Background colors */
-			--color-bg-primary-dark: #121212;
-			--color-bg-secondary-dark: #1e1e1e;
-			--color-bg-tertiary-dark: #2d2d2d;
+			--color-bg-primary-dark: #2D2D2D;
+			--color-bg-secondary-dark: rgb(49, 49, 49);
+			--color-bg-tertiary-dark: #515151;
 
 			/* Border colors */
 			--color-border-dark: #4a4a4a;
@@ -149,7 +149,7 @@
 			--shadow-lg-dark: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
 			/* Navbar */
-			--color-bg-navbar-dark: #353535ee;
+			--color-bg-navbar-dark: #404040ee;
 			--color-navbar-dark: #c7c7c7;
 		}
 
@@ -188,7 +188,7 @@
 		}
 
 		@media only screen and (prefers-color-scheme: dark) {
-			:root:not([data-theme="light"]) {
+			:root:not(.light) {
 				/* Colors */
 				--color-primary: var(--color-primary-dark);
 				--color-secondary: var(--color-secondary-dark);
@@ -232,6 +232,7 @@
 			color: var(--color-text-primary);
 			font-family: var(--font-family-sans);
 			font-weight: 200;
+			accent-color: var(--color-primary);
 		}
 
 		h1 {
