@@ -1,7 +1,7 @@
-import { redirect } from '@sveltejs/kit';
+// import { redirect } from '@sveltejs/kit';
 
-export function load({ url }) {
-	if (url.pathname === '/') {
-		redirect(307, '/password-generator');
-	}
-}
+// export function load({ url }) {
+// 	if (url.pathname === '/') {
+// 		redirect(307, '/password-generator');
+// 	}
+// }

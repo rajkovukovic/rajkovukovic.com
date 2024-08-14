@@ -10,7 +10,9 @@
 <!-- <Header name={ownerName} /> -->
 <main>
 	<slot />
-	<MainNavbar />
+	{#if false}
+		<MainNavbar />
+	{/if}
 </main>
 
 <style lang="scss">

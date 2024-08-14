@@ -9,10 +9,10 @@
 <style lang="scss">
 	.safe-area {
 		&.enabled {
-			padding-top: var(--safe-area-top);
-			padding-left: var(--safe-area-left);
-			padding-right: var(--safe-area-right);
-			padding-bottom: var(--safe-area-bottom);
+			margin-top: var(--safe-area-top);
+			margin-left: var(--safe-area-left);
+			margin-right: var(--safe-area-right);
+			margin-bottom: var(--safe-area-bottom);
 		}
 	}
 </style>
