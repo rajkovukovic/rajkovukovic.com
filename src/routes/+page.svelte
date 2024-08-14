@@ -10,7 +10,4 @@
 <section>This is Home page</section>
 
 <style lang="scss">
-	div {
-		padding: 2rem;
-	}
 </style>

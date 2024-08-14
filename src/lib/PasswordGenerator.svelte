@@ -3,6 +3,8 @@
 	import { globalWindow } from '$lib/globalWindow';
 	import { safeStorage } from '$lib/safeStorage';
 	import { makeFinite } from '$lib/utils';
+	import { localization } from './localization';
+	import { translatorStore } from './state/app';
 
 	const minCharacterCount = 4;
 	const maxCharacterCount = 20;
@@ -11,7 +13,7 @@
 	let password =
 		globalWindow.initialPassword ?? generatePassword(characterCount, useSpecialCharacters);
 	let copiedToClipboardTimer: any;
-	let copyToClipboardError = false;
+	let copyToClipboardError = null;
 
 	// copiedToClipboardTimer = setTimeout(
 	// 	() => (copiedToClipboardTimer = setTimeout(() => (copiedToClipboardTimer = null), 1500)),
@@ -21,8 +23,8 @@
 	function copyPasswordToClipboard() {
 		Promise.resolve()
 			.then(() => navigator.clipboard.writeText(password))
-			.then(() => (copyToClipboardError = false))
-			.catch(() => (copyToClipboardError = true))
+			.then(() => (copyToClipboardError = null))
+			.catch((e) => (copyToClipboardError = e))
 			.finally(() => {
 				clearTimeout(copiedToClipboardTimer);
 				copiedToClipboardTimer = setTimeout(() => (copiedToClipboardTimer = null), 1500);
@@ -67,23 +69,26 @@
 		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 		<h2 on:click={copyPasswordToClipboard}>
 			{copiedToClipboardTimer
-				? copyToClipboardError
-					? 'Tap password to copy'
-					: 'Copied'
-				: 'Password Generator'}
+				? $translatorStore(localization.passwordGeneratorCopied)
+				: $translatorStore(localization.passwordGeneratorTitle)}
 		</h2>
 	{/key}
 	<table>
 		<tbody>
 			<tr on:click={copyPasswordToClipboard}>
-				<td><label for="password">Password</label></td>
+				<td
+					><label for="password">{$translatorStore(localization.passwordGeneratorPassword)}</label
+					></td
+				>
 				<td>
 					<span id="password" style:min-width="{maxCharacterCount}ch">{password}</span>
 				</td>
 			</tr>
 			<tr>
 				<td on:click={increaseCharacterCount}>
-					<label for="not-characterCount">{characterCount} characters</label>
+					<label for="not-characterCount"
+						>{characterCount} {$translatorStore(localization.passwordGeneratorCharacters)}</label
+					>
 				</td>
 				<td>
 					<input
@@ -99,7 +104,9 @@
 			</tr>
 			<tr>
 				<td on:click={handleUseSpecialCharactersChange}>
-					<label for="not-useSpecialCharacters">Special characters</label>
+					<label for="not-useSpecialCharacters"
+						>{$translatorStore(localization.passwordGeneratorSpecial)}</label
+					>
 				</td>
 				<td>
 					<input
@@ -115,10 +122,10 @@
 				<td colspan="2">
 					<div class="button-wrapper">
 						<button on:click|preventDefault={regeneratePasswordAndCopyToClipboard}
-							>Generate New And Copy</button
+							>{$translatorStore(localization.passwordGeneratorGenerateAndCopy)}</button
 						>
 						<button on:click|preventDefault={copyPasswordToClipboard} class="default"
-							>Copy Password</button
+							>{$translatorStore(localization.passwordGeneratorCopy)}</button
 						>
 					</div>
 				</td>
