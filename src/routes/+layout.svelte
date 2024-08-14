@@ -1,5 +1,10 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import MainNavbar from '$lib/widgets/MainNavbar.svelte';
+
+	if (browser) {
+		setTimeout(() => document.documentElement.classList.add('loaded'), 1000);
+	}
 </script>
 
 <!-- <Header name={ownerName} /> -->
