@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { IoDesktopOutline, IoMoonOutline, IoSunnyOutline } from '$lib/icons';
 	import { availableThemes, setTheme, themeStore } from '$lib/state/app';
 	import { Icon, type IconType } from 'svelte-icons-pack';
-	import { IoDesktopOutline, IoMoonOutline, IoSunnyOutline } from 'svelte-icons-pack/io';
 	import OverlayMenu from './OverlayMenu.svelte';
 	import OverlayMenuItem from './OverlayMenuItem.svelte';
 

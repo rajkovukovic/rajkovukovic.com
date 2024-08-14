@@ -25,6 +25,10 @@ npm run dev
 npm run dev -- --open
 ```
 
+## Hosting
+
+This app is hosted on vercel.com and it is redeployed automatically after every commit on the `main` branch.
+
 ## Building
 
 To create a production version of your app:

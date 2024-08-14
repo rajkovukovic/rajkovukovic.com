@@ -20,8 +20,14 @@
 
 <style lang="scss">
 	section {
-		padding: 12rem 8rem;
+		padding: 6rem 3rem;
 		opacity: 0;
 		animation: fadeIn 0.5s ease-out 0.1s forwards;
+	}
+
+	@media only screen and (min-width: 769px) {
+		section {
+			padding: 12rem 6rem;
+		}
 	}
 </style>

@@ -2,8 +2,8 @@
 	export let selected: boolean = false;
 </script>
 
-<!-- svelte-ignore a11y_click_events_have_key_events -->
-<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="overlay-menu-item" class:selected on:click>
 	<div class="overlay-menu-item-background"></div>
 	<div class="overlay-menu-item-content">
@@ -20,10 +20,10 @@
 			cursor: pointer;
 		}
 		&.selected .overlay-menu-item-background {
-			background: rgba(0, 0, 0, 0.2);
+			background: var(--color-text-primary);
 		}
 		&:hover .overlay-menu-item-background {
-			background: rgba(0, 0, 0, 0.2) !important;
+			background: var(--color-text-primary) !important;
 		}
 	}
 
@@ -33,6 +33,7 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
+		opacity: 0.2;
 		border-radius: var(--border-radius-md);
 	}
 
