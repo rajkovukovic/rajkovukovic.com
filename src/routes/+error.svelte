@@ -4,8 +4,8 @@
 	import PageContainer from '$lib/widgets/shared/PageContainer.svelte';
 	import { onDestroy, onMount } from 'svelte';
 
-	onMount(() => errorStore.set($page));
-	onDestroy(() => errorStore.set(null));
+	onMount(() => errorStore.next($page));
+	onDestroy(() => errorStore.next(null));
 </script>
 
 <PageContainer>

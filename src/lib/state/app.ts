@@ -1,3 +1,5 @@
+import { browser } from "$app/environment";
+import type { LocalizedString } from "$lib/models/Resume";
 import { SettingsStorage } from "$lib/SettingsStorage";
 import type { Page } from "@sveltejs/kit";
 import { BehaviorSubject, merge, Observable, of } from 'rxjs';
@@ -8,6 +10,11 @@ export const errorStore = new BehaviorSubject<Page<Record<string, string>, strin
 export const showSettingsStore = new BehaviorSubject(false);
 
 export const languageStore = new BehaviorSubject<string | null>(SettingsStorage.language);
+
+export const translatorStore = languageStore.pipe(
+	distinctUntilChanged(),
+	map((language) => translatorFactory(language ?? 'en')),
+)
 
 export const themeStore = new BehaviorSubject<string | null>(SettingsStorage.theme);
 
@@ -51,3 +58,31 @@ export const infoPanelStore: Observable<InfoPanelData | null> = merge(
 		),
 		startWith(null),
 	);
+
+
+if (browser) {
+	const rootElement = document.documentElement;
+	themeStore.subscribe((theme) => {
+		if (theme === 'light') {
+			rootElement.classList.add('light');
+			rootElement.classList.remove('dark');
+		} else if (theme === 'dark') {
+			rootElement.classList.add('dark');
+			rootElement.classList.remove('light');
+		} else {
+			rootElement.classList.remove('light');
+			rootElement.classList.remove('dark');
+		}
+	});
+}
+
+function translatorFactory(language: string) {
+	return function (term: LocalizedString) {
+		if (typeof term === 'string') {
+			return term;
+		}
+		if (term && typeof term === 'object') {
+			return term[language] ?? term['en'];
+		}
+	}
+}

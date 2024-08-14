@@ -9,7 +9,6 @@
 	import OverlayInfoPanel from './OverlayInfoPanel.svelte';
 
 	$: rootPath = $page.url.pathname.split('/').slice(0, 2).join('/');
-	$: console.log({ rootPath, pathname: $page.url.pathname });
 	$: activeIndex = routes.findIndex((route) => route.path === rootPath);
 	$: hasError = Boolean($errorStore);
 	$: show404 = hasError && activeIndex < 0;

@@ -1,25 +1,28 @@
+export type LocalizedString = string | Record<string, string>;
+
 export interface Experience {
-	company: string;
-	position: string;
+	company: LocalizedString;
+	position: LocalizedString;
 	startDate: Date;
 	endDate: Date | null; // null if current job
-	responsibilities: string[];
+	responsibilities: LocalizedString[];
 }
 
 export interface Skill {
-	name: string;
-	level: 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
+	name: LocalizedString;
 }
 
 export interface Education {
-	institution: string;
-	degree: string;
-	field: string;
+	institution: LocalizedString;
+	degree: LocalizedString;
+	field: LocalizedString;
 	graduationDate: Date;
 }
 
 export interface Resume {
-	summary: string;
+	name: LocalizedString;
+	phoneticName?: LocalizedString;
+	summary: LocalizedString;
 	workExperience: Experience[];
 	skills: Skill[];
 	education: Education[];

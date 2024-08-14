@@ -7,6 +7,7 @@
 	let isMouseIn = false;
 	let action: InfoPanelData | null = null;
 	let lastAction: InfoPanelData | null = null;
+
 	$: action = $infoPanelStore;
 	$: lastAction = action ?? lastAction;
 
@@ -22,9 +23,6 @@
 			timer = undefined;
 		}, 1200);
 	}
-
-	$: console.log(`isMouseIn: ${isMouseIn}`);
-	$: console.log(`action: ${JSON.stringify(action)}`);
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->

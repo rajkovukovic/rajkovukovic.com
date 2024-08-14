@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ownerName } from '$lib/ownerName';
 	import { resumes } from '$lib/resumes';
+	import { translatorStore } from '$lib/state/app';
 	import PageContainer from '$lib/widgets/shared/PageContainer.svelte';
 
 	const resume = resumes[0];
@@ -19,14 +20,16 @@
 
 <PageContainer>
 	<div class="resume">
-		<h1 class="center upper zero-margin">Rajko Vukovic</h1>
-		<h3 class="center zero-margin">/ ry-ko &nbsp; voo-koh-vich /</h3>
+		<h1 class="center upper zero-margin">{$translatorStore(resume.name)}</h1>
+		{#if resume.phoneticName}
+			<h3 class="center zero-margin">/ {$translatorStore(resume.phoneticName)} /</h3>
+		{/if}
 
 		<hr />
 
 		<h2 class="upper">Summary</h2>
 		<p>
-			{resume.summary}
+			{$translatorStore(resume.summary)}
 		</p>
 
 		<hr />
@@ -34,14 +37,14 @@
 		<h2 class="upper">Work Experience</h2>
 		{#each resume.workExperience as job}
 			<div class="job">
-				<h3 style="margin-bottom: 0;">{job.position}</h3>
+				<h3 style="margin-bottom: 0;">{$translatorStore(job.position)}</h3>
 				<h4 style="margin-top: 0;">
-					{job.company} &nbsp;
+					{$translatorStore(job.company)} &nbsp;
 					<span style="opacity: 0.5;">{formatDate(job.startDate)} - {formatDate(job.endDate)}</span>
 				</h4>
 				<ul>
 					{#each job.responsibilities as responsibility}
-						<li>{responsibility}</li>
+						<li>{$translatorStore(responsibility)}</li>
 					{/each}
 				</ul>
 			</div>
@@ -52,7 +55,7 @@
 		<h2 class="upper">Skills</h2>
 		<ul class="skills">
 			{#each resume.skills as skill}
-				<li>{skill.name} - {skill.level}</li>
+				<li>{$translatorStore(skill.name)}</li>
 			{/each}
 		</ul>
 
@@ -61,9 +64,9 @@
 		<h2 class="upper">Education</h2>
 		{#each resume.education as edu}
 			<div class="education">
-				<h3>{edu.degree}</h3>
-				<h4>{edu.institution}</h4>
-				<p>{edu.field}</p>
+				<h3>{$translatorStore(edu.degree)}</h3>
+				<h4>{$translatorStore(edu.institution)}</h4>
+				<p>{$translatorStore(edu.field)}</p>
 				<p class="date">Graduated: {formatDate(edu.graduationDate)}</p>
 			</div>
 		{/each}
