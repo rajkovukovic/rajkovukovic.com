@@ -4,6 +4,7 @@
 	import { globalWindow } from '$lib/globalWindow';
 	import { safeStorage } from '$lib/safeStorage';
 	import { makeFinite } from '$lib/utils';
+	import { generateStars } from './generateStars';
 	import { localization } from './localization';
 	import { translatorStore } from './state/app';
 
@@ -22,6 +23,8 @@
 	// 	() => (copiedToClipboardTimer = setTimeout(() => (copiedToClipboardTimer = null), 1500)),
 	// 	1000
 	// );
+
+	$: passwordToDisplay = copiedToClipboardTimer ? password : generateStars(password);
 
 	function copyPasswordToClipboard() {
 		Promise.resolve()
@@ -82,8 +85,12 @@
 				<tr on:click={copyPasswordToClipboard}>
 					<!-- svelte-ignore a11y-label-has-associated-control -->
 					<td><label>{$translatorStore(localization.passwordGeneratorPassword)}</label></td>
-					<td>
-						<span id="password" style:min-width="{maxCharacterCount}ch">{password}</span>
+					<td style:min-width="{maxCharacterCount * 1.25}ch">
+						<span id="password" style:--chars={password.length + 'ch'}>
+							{#each passwordToDisplay.split('') as char}
+								<span class="password-part">{char}</span>
+							{/each}
+						</span>
 					</td>
 				</tr>
 				<tr>
@@ -126,7 +133,8 @@
 							<button on:click|preventDefault={regeneratePasswordAndCopyToClipboard}
 								>{$translatorStore(localization.passwordGeneratorGenerateAndCopy)}</button
 							>
-							<button on:click|preventDefault={copyPasswordToClipboard} class="default"
+							<!-- svelte-ignore a11y-autofocus -->
+							<button autofocus on:click|preventDefault={copyPasswordToClipboard} class="default"
 								>{$translatorStore(localization.passwordGeneratorCopy)}</button
 							>
 						</div>
@@ -146,12 +154,20 @@
 		flex-direction: column;
 		justify-content: center;
 		padding: 1em;
+		user-select: none;
 	}
 
 	#password {
-		display: inline-block;
+		min-width: var(--chars);
+		max-width: var(--chars);
+		display: flex;
+		justify-content: space-between;
 		font-weight: bold;
 		/* font-family: monospace; */
+	}
+
+	.password-part {
+		display: inline-block;
 	}
 
 	h2 {
