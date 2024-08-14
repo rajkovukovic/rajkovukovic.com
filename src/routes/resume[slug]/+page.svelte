@@ -118,11 +118,6 @@
 		margin-bottom: 1.5rem;
 	}
 
-	.date {
-		font-style: italic;
-		margin: 0.5rem 0;
-	}
-
 	ul {
 		margin-top: 0.5rem;
 	}

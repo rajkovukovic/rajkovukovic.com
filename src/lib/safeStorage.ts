@@ -1,3 +1,4 @@
+import { browser } from "$app/environment";
 import { availableLanguages } from "./constants";
 
 class SafeStorage {
@@ -87,9 +88,23 @@ class SafeStorage {
 
 export const safeStorage = new SafeStorage();
 
-export function getUserPreferredLanguage(): string {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const browserLanguages = (navigator as Navigator).languages || [navigator.language || (navigator as any).userLanguage];
+export function getUserPreferredLanguage(requestHeaders?: Headers): string {
+	let browserLanguages: string[] = [];
+
+	if (browser) {
+		browserLanguages = (navigator.languages || [navigator.language]).slice();
+	} else if (requestHeaders) {
+		// Server-side: Use request headers to get the preferred language
+		const acceptLanguage = requestHeaders.get('accept-language');
+		if (acceptLanguage) {
+			browserLanguages = acceptLanguage.split(',').map(lang => lang.split(';')[0]);
+		}
+	}
+
+	// Fallback to 'en' if no languages are detected
+	if (browserLanguages.length === 0) {
+		return availableLanguages[0];
+	}
 
 	for (const lang of browserLanguages) {
 		const primaryLang = lang.split('-')[0]; // Extract the primary language code, e.g., 'en' from 'en-US'
@@ -98,5 +113,6 @@ export function getUserPreferredLanguage(): string {
 		}
 	}
 
+	// Default to the first available language if no match is found
 	return availableLanguages[0];
 }

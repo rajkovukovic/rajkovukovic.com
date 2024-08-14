@@ -3,7 +3,7 @@ import { availableLanguages, availableThemes } from "$lib/constants";
 import type { LocalizedString } from "$lib/models/Resume";
 import { safeStorage } from "$lib/safeStorage";
 import type { Page } from "@sveltejs/kit";
-import { BehaviorSubject, merge, Observable, of } from 'rxjs';
+import { BehaviorSubject, merge, type Observable, of } from 'rxjs';
 import { delay, distinctUntilChanged, map, skip, startWith, switchMap } from 'rxjs/operators';
 
 export const mouseInNavigationBarStore = new BehaviorSubject(false);
