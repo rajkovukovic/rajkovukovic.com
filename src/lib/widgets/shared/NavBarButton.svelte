@@ -4,7 +4,8 @@
 
 	export let active = false;
 	export let error = false;
-	export let href: string;
+	export let href: string | null = null;
+	export let position: 'corner' | 'up' | 'down' | null = null;
 
 	let navBarButtonCBStore: Writable<Function | undefined> = getContext('navBarButtonCB');
 	let w: number;
@@ -20,7 +21,7 @@
 
 <a
 	{href}
-	class="nab-bar-button"
+	class="nab-bar-button {position ?? ''}"
 	class:active
 	class:error
 	bind:clientWidth={w}
@@ -42,6 +43,9 @@
 		min-width: 3rem;
 		min-height: 3rem;
 		transform-origin: 50% 50%;
+		transition:
+			opacity 0.2s ease-out,
+			transform 0.2s ease-out;
 		&.active,
 		&:hover {
 			color: var(--color-primary);
@@ -52,16 +56,25 @@
 		&.error {
 			color: var(--color-danger);
 		}
-		&:first-of-type {
-			border-radius: var(--border-radius-md) 0 0 var(--border-radius-md);
+
+		&.corner,
+		&.up,
+		&.down {
+			opacity: 0;
+			pointer-events: none;
 		}
-		&:last-of-type {
-			// border-right: 0.5px solid var(--color-navbar);
-			border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+
+		&.corner {
+			transform: translate(-35%, -35%) scale(2);
+			opacity: 0.2;
 		}
-		&:not(:first-of-type) {
-			margin-top: 0;
-			margin-left: var(--navbar-button-spacing);
+
+		&.up {
+			transform: translateY(-100%);
+		}
+
+		&.down {
+			transform: translateY(100%);
 		}
 	}
 
@@ -75,15 +88,11 @@
 	// selector when screen is larger than 768px;
 	@media only screen and (min-width: 769px) {
 		.nab-bar-button {
-			&:first-of-type {
-				border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+			&.up {
+				transform: translateX(-100%);
 			}
-			&:last-of-type {
-				border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
-			}
-			&:not(:first-of-type) {
-				margin-top: var(--navbar-button-spacing);
-				margin-left: 0;
+			&.down {
+				transform: translateX(100%);
 			}
 		}
 	}

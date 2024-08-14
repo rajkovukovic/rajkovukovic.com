@@ -1,27 +1,53 @@
 import { SettingsStorage } from "$lib/SettingsStorage";
 import type { Page } from "@sveltejs/kit";
-import { writable, type Writable } from "svelte/store";
+import { BehaviorSubject, merge, Observable, of } from 'rxjs';
+import { delay, distinctUntilChanged, map, skip, startWith, switchMap } from 'rxjs/operators';
 
-export const errorStore: Writable<Page<Record<string, string>, string | null> | null> = writable(null);
+export const errorStore = new BehaviorSubject<Page<Record<string, string>, string | null> | null>(null);
 
-export const showSettingsStore = writable(false);
+export const showSettingsStore = new BehaviorSubject(false);
 
-export const languageStore: Writable<string | null> = writable(SettingsStorage.language);
+export const languageStore = new BehaviorSubject<string | null>(SettingsStorage.language);
 
-export const themeStore: Writable<string | null> = writable(SettingsStorage.theme);
+export const themeStore = new BehaviorSubject<string | null>(SettingsStorage.theme);
+
+export const availableLanguages = ['en', 'de', 'es'];
+export const availableThemes = ['light', 'dark', 'auto'];
+
+export function setLanguage(language: string) {
+	SettingsStorage.language = language;
+	languageStore.next(language);
+}
+
+export function setTheme(theme: string) {
+	SettingsStorage.theme = theme;
+	themeStore.next(theme);
+}
 
 export function nextLanguage() {
-	const languages = ['en', 'de', 'es'];
-	const index = languages.indexOf(SettingsStorage.language ?? '');
-	const language = index < 0 ? languages[0] : languages[(index + 1) % languages.length];
-	SettingsStorage.language = language;
-	console.log({ language });
+	const index = availableLanguages.indexOf(SettingsStorage.language ?? '');
+	const language = index < 0 ? availableLanguages[0] : availableLanguages[(index + 1) % availableLanguages.length];
+	setLanguage(language);
 }
 
 export function nextTheme() {
-	const themes = ['light', 'dark', 'system'];
-	const index = themes.indexOf(SettingsStorage.theme ?? '');
-	const theme = index < 0 ? themes[0] : themes[(index + 1) % themes.length];
-	SettingsStorage.theme = theme;
-	console.log({ theme });
+	const index = availableThemes.indexOf(SettingsStorage.theme ?? '');
+	const theme = index < 0 ? availableThemes[0] : availableThemes[(index + 1) % availableThemes.length];
+	setTheme(theme);
 }
+
+export type InfoPanelData = {
+	language?: string | null;
+	theme?: string | null;
+}
+
+export const infoPanelStore: Observable<InfoPanelData | null> = merge(
+	languageStore.pipe(distinctUntilChanged(), skip(1), map(language => ({ language }))),
+	themeStore.pipe(distinctUntilChanged(), skip(1), map(theme => ({ theme })))
+)
+	.pipe(
+		switchMap(value =>
+			of(null).pipe(delay(100), startWith(value))
+		),
+		startWith(null),
+	);

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import SafeArea from './SafeArea.svelte';
 
-	export const title: string | null = null;
+	export let title: string | null = null;
 
 	export let withSafeArea = true;
 </script>
