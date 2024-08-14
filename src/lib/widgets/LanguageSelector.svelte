@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { availableLanguages, languageStore, setLanguage } from '$lib/state/app';
+	import { availableLanguages } from '$lib/constants';
+	import { languageStore, setLanguage } from '$lib/state/app';
 	import OverlayMenu from './OverlayMenu.svelte';
 	import OverlayMenuItem from './OverlayMenuItem.svelte';
 

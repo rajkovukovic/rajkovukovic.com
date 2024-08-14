@@ -1,3 +1,3 @@
-export function makeFinite(value: any, fallbackValue: number): number {
-	return Number.isFinite(value) ? value : fallbackValue;
+export function makeFinite(value: unknown, fallbackValue: number): number {
+	return Number.isFinite(value) ? value as number : fallbackValue;
 }

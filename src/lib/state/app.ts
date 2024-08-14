@@ -1,6 +1,7 @@
 import { browser } from "$app/environment";
+import { availableLanguages, availableThemes } from "$lib/constants";
 import type { LocalizedString } from "$lib/models/Resume";
-import { SettingsStorage } from "$lib/SettingsStorage";
+import { safeStorage } from "$lib/safeStorage";
 import type { Page } from "@sveltejs/kit";
 import { BehaviorSubject, merge, Observable, of } from 'rxjs';
 import { delay, distinctUntilChanged, map, skip, startWith, switchMap } from 'rxjs/operators';
@@ -13,36 +14,33 @@ export const errorStore = new BehaviorSubject<Page<Record<string, string>, strin
 
 export const showSettingsStore = new BehaviorSubject(false);
 
-export const languageStore = new BehaviorSubject<string | null>(SettingsStorage.language);
+export const languageStore = new BehaviorSubject<string | null>(safeStorage.language);
 
 export const translatorStore = languageStore.pipe(
 	distinctUntilChanged(),
 	map((language) => translatorFactory(language ?? 'en')),
 )
 
-export const themeStore = new BehaviorSubject<string | null>(SettingsStorage.theme);
-
-export const availableLanguages = ['en', 'de', 'es'];
-export const availableThemes = ['light', 'dark', 'auto'];
+export const themeStore = new BehaviorSubject<string | null>(safeStorage.theme);
 
 export function setLanguage(language: string) {
-	SettingsStorage.language = language;
+	safeStorage.language = language;
 	languageStore.next(language);
 }
 
 export function setTheme(theme: string) {
-	SettingsStorage.theme = theme;
+	safeStorage.theme = theme;
 	themeStore.next(theme);
 }
 
 export function nextLanguage() {
-	const index = availableLanguages.indexOf(SettingsStorage.language ?? '');
+	const index = availableLanguages.indexOf(safeStorage.language ?? '');
 	const language = index < 0 ? availableLanguages[0] : availableLanguages[(index + 1) % availableLanguages.length];
 	setLanguage(language);
 }
 
 export function nextTheme() {
-	const index = availableThemes.indexOf(SettingsStorage.theme ?? '');
+	const index = availableThemes.indexOf(safeStorage.theme ?? '');
 	const theme = index < 0 ? availableThemes[0] : availableThemes[(index + 1) % availableThemes.length];
 	setTheme(theme);
 }

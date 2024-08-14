@@ -1,3 +1,5 @@
+import { availableLanguages } from "./constants";
+
 class SafeStorage {
 	clear() {
 		try {
@@ -7,11 +9,20 @@ class SafeStorage {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	getItem(key: string): any {
 		try {
 			const raw = localStorage.getItem(key);
-			return raw == null ? null : JSON.parse(raw);
-		} catch (error) {
+			const parsed = raw == null ? null : JSON.parse(raw);
+
+			// Check if the parsed value is a number stored as a string and convert it back to a number
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			if (typeof parsed === 'string' && !isNaN(parsed as any)) {
+				return Number(parsed);
+			}
+
+			return parsed;
+		} catch {
 			return null;
 		}
 	}
@@ -24,12 +35,35 @@ class SafeStorage {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	setItem(key: string, value: any) {
 		try {
-			return localStorage.setItem(key, JSON.stringify(value));
-		} finally {
+			if (value == null) {
+				localStorage.removeItem(key);
+			} else {
+				localStorage.setItem(key, JSON.stringify(value));
+			}
+		} catch {
 			// noop
 		}
+	}
+
+	get language(): string | null {
+		const value = this.getItem('language');
+		return availableLanguages.includes(value) ? value : getUserPreferredLanguage();
+	}
+
+	set language(value: string | null) {
+		this.setItem('language', value);
+	}
+
+	get theme(): string | null {
+		const value = this.getItem('theme');
+		return typeof value === 'string' ? value : null;
+	}
+
+	set theme(value: string | null) {
+		this.setItem('theme', value);
 	}
 
 	get passwordGeneratorCharacterCount(): number | null {
@@ -52,3 +86,17 @@ class SafeStorage {
 }
 
 export const safeStorage = new SafeStorage();
+
+export function getUserPreferredLanguage(): string {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const browserLanguages = (navigator as Navigator).languages || [navigator.language || (navigator as any).userLanguage];
+
+	for (const lang of browserLanguages) {
+		const primaryLang = lang.split('-')[0]; // Extract the primary language code, e.g., 'en' from 'en-US'
+		if (availableLanguages.includes(primaryLang)) {
+			return primaryLang;
+		}
+	}
+
+	return availableLanguages[0];
+}

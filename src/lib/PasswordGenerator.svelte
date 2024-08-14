@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { generatePassword } from '$lib/generatePassword';
 	import { globalWindow } from '$lib/globalWindow';
 	import { safeStorage } from '$lib/safeStorage';
@@ -8,8 +9,10 @@
 
 	const minCharacterCount = 4;
 	const maxCharacterCount = 20;
-	let characterCount = makeFinite(safeStorage.passwordGeneratorCharacterCount, 8);
-	let useSpecialCharacters = safeStorage.passwordGeneratorUseSpecialCharacters ?? true;
+	let characterCount = browser ? makeFinite(safeStorage.passwordGeneratorCharacterCount, 8) : 8;
+	let useSpecialCharacters = browser
+		? (safeStorage.passwordGeneratorUseSpecialCharacters ?? true)
+		: true;
 	let password =
 		globalWindow.initialPassword ?? generatePassword(characterCount, useSpecialCharacters);
 	let copiedToClipboardTimer: any;
@@ -63,76 +66,79 @@
 	}
 </script>
 
-<form on:submit|preventDefault={copyPasswordToClipboard}>
-	{#key password + copiedToClipboardTimer}
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-		<h2 on:click={copyPasswordToClipboard}>
-			{copiedToClipboardTimer
-				? $translatorStore(localization.passwordGeneratorCopied)
-				: $translatorStore(localization.passwordGeneratorTitle)}
-		</h2>
-	{/key}
-	<table>
-		<tbody>
-			<tr on:click={copyPasswordToClipboard}>
-				<td
-					><label for="password">{$translatorStore(localization.passwordGeneratorPassword)}</label
-					></td
-				>
-				<td>
-					<span id="password" style:min-width="{maxCharacterCount}ch">{password}</span>
-				</td>
-			</tr>
-			<tr>
-				<td on:click={increaseCharacterCount}>
-					<label for="not-characterCount"
-						>{characterCount} {$translatorStore(localization.passwordGeneratorCharacters)}</label
-					>
-				</td>
-				<td>
-					<input
-						type="range"
-						id="characterCount"
-						value={characterCount}
-						on:input={handleCharacterCountChange}
-						on:change={copyPasswordToClipboard}
-						min={minCharacterCount}
-						max={maxCharacterCount}
-					/>
-				</td>
-			</tr>
-			<tr>
-				<td on:click={handleUseSpecialCharactersChange}>
-					<label for="not-useSpecialCharacters"
-						>{$translatorStore(localization.passwordGeneratorSpecial)}</label
-					>
-				</td>
-				<td>
-					<input
-						id="useSpecialCharacters"
-						type="checkbox"
-						checked={useSpecialCharacters}
-						on:change={handleUseSpecialCharactersChange}
-					/>
-				</td>
-			</tr>
+{#if browser}
+	<form on:submit|preventDefault={copyPasswordToClipboard}>
+		{#key password + copiedToClipboardTimer}
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+			<h2 on:click={copyPasswordToClipboard}>
+				{copiedToClipboardTimer
+					? $translatorStore(localization.passwordGeneratorCopied)
+					: $translatorStore(localization.passwordGeneratorTitle)}
+			</h2>
+		{/key}
+		<table>
+			<tbody>
+				<tr on:click={copyPasswordToClipboard}>
+					<!-- svelte-ignore a11y-label-has-associated-control -->
+					<td><label>{$translatorStore(localization.passwordGeneratorPassword)}</label></td>
+					<td>
+						<span id="password" style:min-width="{maxCharacterCount}ch">{password}</span>
+					</td>
+				</tr>
+				<tr>
+					<td on:click={increaseCharacterCount}>
+						<label for="characterCount"
+							>{characterCount} {$translatorStore(localization.passwordGeneratorCharacters)}</label
+						>
+					</td>
+					<td>
+						<input
+							type="range"
+							id="characterCount"
+							value={characterCount}
+							on:input={handleCharacterCountChange}
+							on:change={copyPasswordToClipboard}
+							min={minCharacterCount}
+							max={maxCharacterCount}
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td on:click={handleUseSpecialCharactersChange}>
+						<label for="useSpecialCharacters"
+							>{$translatorStore(localization.passwordGeneratorSpecial)}</label
+						>
+					</td>
+					<td>
+						<input
+							id="useSpecialCharacters"
+							type="checkbox"
+							checked={useSpecialCharacters}
+							on:change={handleUseSpecialCharactersChange}
+						/>
+					</td>
+				</tr>
 
-			<tr>
-				<td colspan="2">
-					<div class="button-wrapper">
-						<button on:click|preventDefault={regeneratePasswordAndCopyToClipboard}
-							>{$translatorStore(localization.passwordGeneratorGenerateAndCopy)}</button
-						>
-						<button on:click|preventDefault={copyPasswordToClipboard} class="default"
-							>{$translatorStore(localization.passwordGeneratorCopy)}</button
-						>
-					</div>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-</form>
+				<tr>
+					<td colspan="2">
+						<div class="button-wrapper">
+							<button on:click|preventDefault={regeneratePasswordAndCopyToClipboard}
+								>{$translatorStore(localization.passwordGeneratorGenerateAndCopy)}</button
+							>
+							<button on:click|preventDefault={copyPasswordToClipboard} class="default"
+								>{$translatorStore(localization.passwordGeneratorCopy)}</button
+							>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+{:else}
+	<h1>Password Generator</h1>
+	<p>Generate secure and safe passwords</p>
+{/if}
 
 <style lang="scss">
 	form {
