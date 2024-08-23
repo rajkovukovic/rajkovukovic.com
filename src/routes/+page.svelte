@@ -70,15 +70,23 @@
 		cameraTimers.push(t2);
 	}
 
-	$: console.log($zoom);
+	// $: console.log($zoom);
 
 	let viewportWidth: number;
 	let viewportHeight: number;
 	let stageWidth: number;
 	let stageHeight: number;
+	let viewportMin: number;
+	let viewportMax: number;
+	let stageMin: number;
+	let stageMax: number;
 
 	$: stageWidth = viewportWidth;
 	$: stageHeight = viewportHeight;
+	$: viewportMin = Math.min(viewportWidth, viewportHeight);
+	$: viewportMax = Math.max(viewportWidth, viewportHeight);
+	$: stageMin = Math.min(stageWidth, stageHeight);
+	$: stageMax = Math.max(stageWidth, stageHeight);
 </script>
 
 <svelte:window bind:innerWidth={viewportWidth} bind:innerHeight={viewportHeight} />
@@ -110,8 +118,8 @@
 				<div
 					class="rectangle"
 					style="transform:
-						translate({-stageWidth / 2 + viewportWidth * stage.x}px,
-						{-stageHeight / 2 + viewportHeight * stage.y}px)
+						translate({viewportWidth * stage.x}px,
+						{viewportHeight * stage.y}px)
 						rotate({stage.rotation}deg);"
 				>
 					Stage {stage.id}
@@ -155,10 +163,14 @@
 		position: relative;
 		width: var(--viewport-width);
 		height: var(--viewport-height);
-		border: 1px solid red;
+		background: rgba(255, 0, 0, 0.407);
+		// border: 1px solid red;
 	}
 
 	.viewport-center {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		position: absolute;
 		top: 50%;
 		left: 50%;
