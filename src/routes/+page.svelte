@@ -104,8 +104,8 @@
 			class="viewport-center"
 			style="transform:
 				rotate({$cameraRotation}deg)
-				translate({($cameraX * stageWidth) / cMultiplier}px,
-				{($cameraY * stageHeight) / cMultiplier}px);
+				translate({($cameraX * stageMax) / cMultiplier}px,
+				{($cameraY * stageMax) / cMultiplier}px);
 			"
 		>
 			<!-- Viewport that will rotate and pan the camera -->
@@ -118,8 +118,8 @@
 				<div
 					class="rectangle"
 					style="transform:
-						translate({viewportWidth * stage.x}px,
-						{viewportHeight * stage.y}px)
+						translate({stageMax * stage.x}px,
+						{stageMax * stage.y}px)
 						rotate({stage.rotation}deg);"
 				>
 					Stage {stage.id}
