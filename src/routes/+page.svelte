@@ -72,14 +72,23 @@
 
 	$: console.log($zoom);
 
-	const stageSize = 800;
-	const rectangleSize = 800;
+	let viewportWidth: number;
+	let viewportHeight: number;
+	let stageWidth: number;
+	let stageHeight: number;
+
+	$: stageWidth = viewportWidth;
+	$: stageHeight = viewportHeight;
 </script>
+
+<svelte:window bind:innerWidth={viewportWidth} bind:innerHeight={viewportHeight} />
 
 <div
 	class="container"
-	style:--stage-size="{stageSize}px"
-	style:--rectangle-size="{rectangleSize}px"
+	style:--viewport-width="{viewportWidth}px"
+	style:--viewport-height="{viewportHeight}px"
+	style:--stage-width="{stageWidth}px"
+	style:--stage-height="{stageHeight}px"
 >
 	<button on:click={nextStage}>Next Stage</button>
 	<div class="viewport" style="transform: scale({Math.pow(Math.abs($zoom), 0.25)});">
@@ -87,8 +96,8 @@
 			class="viewport-center"
 			style="transform:
 				rotate({$cameraRotation}deg)
-				translate({($cameraX * rectangleSize) / cMultiplier}px,
-				{($cameraY * rectangleSize) / cMultiplier}px);
+				translate({($cameraX * stageWidth) / cMultiplier}px,
+				{($cameraY * stageHeight) / cMultiplier}px);
 			"
 		>
 			<!-- Viewport that will rotate and pan the camera -->
@@ -101,8 +110,8 @@
 				<div
 					class="rectangle"
 					style="transform:
-						translate({-rectangleSize / 2 + stageSize * stage.x}px,
-						{-rectangleSize / 2 + stageSize * stage.y}px)
+						translate({-stageWidth / 2 + viewportWidth * stage.x}px,
+						{-stageHeight / 2 + viewportHeight * stage.y}px)
 						rotate({stage.rotation}deg);"
 				>
 					Stage {stage.id}
@@ -144,8 +153,8 @@
 	.viewport {
 		transform-origin: center;
 		position: relative;
-		width: var(--stage-size);
-		height: var(--stage-size);
+		width: var(--viewport-width);
+		height: var(--viewport-height);
 		border: 1px solid red;
 	}
 
@@ -164,8 +173,8 @@
 
 	.rectangle {
 		position: absolute;
-		width: var(--rectangle-size);
-		height: var(--rectangle-size);
+		width: var(--stage-width);
+		height: var(--stage-height);
 		background-color: #ffdd57b1;
 		display: flex;
 		justify-content: center;
