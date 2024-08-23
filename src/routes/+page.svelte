@@ -34,22 +34,40 @@
 	let zoom = tweened(1, { duration: zoomDuration, easing: sineInOut });
 	let nextZoomValue = 1;
 	const cMultiplier = 100;
+	const cameraTimers: Array<number> = [];
+	let prevZoom = 1;
+	let dZoom = 0;
+	$: dZoom = $zoom - prevZoom;
+	$: prevZoom = $zoom;
 
 	function nextStage() {
+		while (cameraTimers.length > 0) {
+			clearTimeout(cameraTimers.pop());
+		}
+
 		currentStageIndex = (currentStageIndex + 1) % stages.length;
 
-		zoom.set(0.01);
+		if (dZoom >= 0) {
+			zoom.set(0.01);
+		}
 
-		setTimeout(() => {
+		const t1 = setTimeout(() => {
 			// Update camera to focus on the next stage
 			const nextStage = stages[currentStageIndex];
 			cameraX.set(-nextStage.x * cMultiplier); // Inverse the direction for camera panning
 			cameraY.set(-nextStage.y * cMultiplier); // Inverse the direction for camera panning
 			cameraRotation.set(-nextStage.rotation); // Inverse for correct rotation direction
 			nextZoomValue = -nextZoomValue;
+			cameraTimers.unshift();
 		}, zoomDuration * 0.75);
 
-		setTimeout(() => zoom.set(1), zoomDuration * 1.25);
+		const t2 = setTimeout(() => {
+			zoom.set(1);
+			cameraTimers.unshift();
+		}, zoomDuration * 1.25);
+
+		cameraTimers.push(t1);
+		cameraTimers.push(t2);
 	}
 
 	$: console.log($zoom);
