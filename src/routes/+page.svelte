@@ -172,43 +172,49 @@
 >
 	<div class="button-wrapper">
 		{#each Array(maxStages).fill(0) as _, index}
-			<button on:click={() => goToStage(index)}>{index}</button>
+			<button style:opacity={index === stageIndex ? 1 : 0.7} on:click={() => goToStage(index)}
+				>{index}</button
+			>
 		{/each}
 	</div>
 	<div class="viewport-wrapper" class:debugging>
 		<div class="viewport" style="transform: scale({Math.pow(Math.abs($zoom), 0.25)});">
 			<div
 				class="viewport-center"
-				style="transform:
-				rotate({$cameraRotation}deg)
-				translate({($cameraX * stageMax) / cMultiplier}px,
-				{($cameraY * stageMax) / cMultiplier}px);
-			"
+				style="transform: rotate({$cameraRotation}deg);
+					"
 			>
-				<!-- <div
+				<div
+					class="viewport-center-2"
+					style="
+						transform:
+							translate(
+								{($cameraX * stageMax) / cMultiplier}px,
+								{($cameraY * stageMax) / cMultiplier}px);"
+				>
+					<!-- <div
 				style="position: absolute; top: -800vh; left: -800vw; right: -800vw; bottom: -800vh; background: rgba(0, 200, 0, 0.1);"
 			></div> -->
-				<!-- Viewport that will rotate and pan the camera -->
-				<!-- <div
+					<!-- Viewport that will rotate and pan the camera -->
+					<!-- <div
 				class="viewport"
 				style="transform: translate(-50%, -50%) translate({$cameraX}px, {$cameraY}px) rotate({$cameraRotation}deg);"
 			> -->
-				<!-- Render all stages (rectangles) -->
-				{#each stages as stage}
-					<div
-						class="rectangle"
-						style="transform-origin: center;
+					<!-- Render all stages (rectangles) -->
+					{#each stages as stage}
+						<div
+							class="rectangle"
+							style="transform-origin: center;
 					transform:
 						translate({stageMax * stage.x}px,
 						{stageMax * stage.y}px)
 						rotate({stage.rotation}deg);"
-					>
-						Stage {stage.id}
-					</div>
-				{/each}
+						>
+							Stage {stage.id}
+						</div>
+					{/each}
+				</div>
 			</div>
-
-			<!-- </div> -->
 		</div>
 	</div>
 </div>
@@ -260,7 +266,8 @@
 		// border: 1px solid red;
 	}
 
-	.viewport-center {
+	.viewport-center,
+	.viewport-center-2 {
 		transform-origin: center;
 		transform-style: preserve-3d;
 		display: flex;
@@ -272,11 +279,15 @@
 		width: 1px;
 		height: 1px;
 		position: absolute;
-		width: 4px;
-		height: 4px;
-		border: 2px solid white;
+		// width: 32px;
+		// height: 32px;
+		// border: 16px solid rgba(0, 255, 0, 0.636);
 		transform: translate(-50%, -50%) rotate(0deg);
-		transition: transform 0.6s ease;
+		transition: transform 0.6s ease 0.3s;
+	}
+	.viewport-center-2 {
+		// border: 16px solid rgba(255, 0, 255, 0.729);
+		transition: transform 0.6s ease 0s;
 	}
 
 	.rectangle {
