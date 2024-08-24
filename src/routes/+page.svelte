@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { sineInOut } from 'svelte/easing';
-	import { spring, tweened } from 'svelte/motion';
+	import { spring } from 'svelte/motion';
 
 	// Custom easing function that is slow in the middle
 	function slowMiddleEasing(t: number): number {
@@ -55,8 +54,8 @@
 	let cameraX = spring(-stages[0].x * cMultiplier, { stiffness: 3, damping: 1 });
 	let cameraY = spring(-stages[0].y * cMultiplier, { stiffness: 3, damping: 1 });
 	let cameraRotation = spring(-stages[0].rotation, { stiffness: 3, damping: 1 });
-	// let zoom = spring(1, { stiffness: 0.5, damping: 0.5 });
-	let zoom = tweened(1, { duration: zoomDuration, easing: sineInOut });
+	let zoom = spring(1, { stiffness: 0.01, damping: 0.2 });
+	// let zoom = tweened(1, { duration: zoomDuration, easing: sineInOut });
 	let nextZoomValue = 1;
 	const cameraTimers: Array<number> = [];
 	let prevZoom = 1;
