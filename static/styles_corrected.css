@@ -51,14 +51,20 @@ header {
 }
 
 .card p {
-    margin: 5px 0;
-    height: 60px;
+    height: 30px;
+    margin-bottom: 10px;
+}
+
+.card p.email {
+    padding-top: 5px;
+    height: 30px;
+    margin-bottom: 20px;
 }
 
 .qr-code {
     margin-top: 10px;
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 20px;
     display: inline-block;
 }
 

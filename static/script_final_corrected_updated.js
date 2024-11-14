@@ -650,12 +650,11 @@ function renderCards(filteredData) {
 
         card.innerHTML = `
             <h2>${person.firstName} ${person.lastName}</h2>
-            <p><strong>Email:</strong> ${person.email}</p>
-            <p><strong>Invitation Link:</strong> ${
-            person.appUrl
+             <p class="email"><strong>Email:</strong><br/> <a href="mailto:${person.email}">${person.email}</a></p>
+            <p><strong>Invitation Link:</strong><br/> ${person.appUrl
                 ? `<a href="${person.appUrl}" target="_blank">${person.appUrl.slice(0, 30)}...</a>`
                 : "N/A"
-        }</p>
+            }</p>
             <div class="qr-code" id="qr-${person.firstName}-${person.lastName}">
             <img src="${person.qrCodeBase64}" width="200px" />
             </div>
