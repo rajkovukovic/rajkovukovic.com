@@ -656,7 +656,7 @@ function renderCards(filteredData) {
                 : "N/A"
             }</p>
             <div class="qr-code" id="qr-${person.firstName}-${person.lastName}">
-            <img src="${person.qrCodeBase64}" width="200px" />
+            <img src="${person.qrCodeBase64}"  width="220px"/>
             </div>
         `;
 
